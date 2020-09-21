@@ -4,8 +4,9 @@ import {
   Grid,
   LinearProgress,
   makeStyles,
-  Paper,
+  Typography,
 } from '@material-ui/core';
+import './assets/scss/index.scss';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import * as Yup from 'yup';
@@ -23,10 +24,16 @@ const schema = Yup.object().shape({
 const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
-    height: '100vh',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '30rem',
+    
+  }
 }));
 
 function App() {
@@ -45,50 +52,36 @@ function App() {
         validationSchema={schema}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form>
-            <Grid
-              alignItems="center"
-              component={Paper}
-              container
-              direction="column"
-              justify="center"
-              spacing={2}
+          <Form className={classes.form}>
+            <Typography variant="h4">Login</Typography>
+            <Field
+              component={TextField}
+              label="Email"
+              name="email"
+              type="email"
+              variant="outlined"
+            />
+            <Field
+              component={TextField}
+              label="Password"
+              name="password"
+              type="password"
+              variant="outlined"
+            />
+            {isSubmitting && (
+              <Grid item>
+                <LinearProgress />
+              </Grid>
+            )}
+            <Button
+              color="primary"
+              disabled={isSubmitting}
+              fullWidth
+              onClick={submitForm}
+              variant="contained"
             >
-              <Grid item>
-                <Field
-                  component={TextField}
-                  label="Email"
-                  name="email"
-                  type="email"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item>
-                <Field
-                  component={TextField}
-                  label="Password"
-                  name="password"
-                  type="password"
-                  variant="outlined"
-                />
-                {isSubmitting && (
-                  <Grid item>
-                    <LinearProgress />
-                  </Grid>
-                )}
-              </Grid>
-              <Grid item>
-                <Button
-                  color="primary"
-                  disabled={isSubmitting}
-                  fullWidth
-                  onClick={submitForm}
-                  variant="contained"
-                >
                   Submit
-                </Button>
-              </Grid>
-            </Grid>
+            </Button>
           </Form>
         )}
       </Formik>
