@@ -1,27 +1,27 @@
 import React from 'react';
 import {
   Button,
-  Grid,
   LinearProgress,
   makeStyles,
   Typography,
 } from '@material-ui/core';
 import './assets/scss/index.scss';
 import { Field, Form, Formik } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { CheckboxWithLabel, TextField } from 'formik-material-ui';
 import * as Yup from 'yup';
 
 const initialValues = {
   email: '',
   password: '',
+  rememberMe: false,
 };
 
 const schema = Yup.object().shape({
-  email: Yup.string().email('Email inválido').required('Campo obrigatório'),
+  email: Yup.string().required('Campo obrigatório'),
   password: Yup.string().required('Campo obrigatório'),
 });
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     height: '100%',
@@ -32,8 +32,13 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     width: '30rem',
-    
-  }
+  },
+  field: {
+    marginTop: theme.spacing(2),
+  },
+  submitButton: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 function App() {
@@ -55,6 +60,7 @@ function App() {
           <Form className={classes.form}>
             <Typography variant="h4">Login</Typography>
             <Field
+              className={classes.field}
               component={TextField}
               label="Email"
               name="email"
@@ -62,26 +68,32 @@ function App() {
               variant="outlined"
             />
             <Field
+              className={classes.field}
               component={TextField}
               label="Password"
               name="password"
               type="password"
               variant="outlined"
             />
-            {isSubmitting && (
-              <Grid item>
-                <LinearProgress />
-              </Grid>
-            )}
+            <Field
+              component={CheckboxWithLabel}
+              Label={{
+                label: <Typography variant="subtitle1">Lembre-me</Typography>,
+              }}
+              name="rememberMe"
+              type="checkbox"
+            />
             <Button
+              className={classes.submitButton}
               color="primary"
               disabled={isSubmitting}
-              fullWidth
+              disableElevation
               onClick={submitForm}
               variant="contained"
             >
-                  Submit
+              Submit
             </Button>
+            {isSubmitting && <LinearProgress color="secondary" />}
           </Form>
         )}
       </Formik>
